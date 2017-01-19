@@ -6,7 +6,7 @@ category: Releases
 excerpt: Elixir v0.9.0 is released with support for reducers, umbrella projects, faster compilation times and dropped support for R15 and earlier OTP versions.
 ---
 
-While [Programming Elixir](http://pragprog.com/book/elixir/programming-elixir) was being announced, we have been working on Elixir v0.9.0 which is finally out. This release contains new features, important performance optimizations and bug fixes.
+While [Programming Elixir](https://pragprog.com/book/elixir/programming-elixir) was being announced, we have been working on Elixir v0.9.0 which is finally out. This release contains new features, important performance optimizations and bug fixes.
 
 Elixir v0.9.0 also removes support for Erlang R15 and earlier versions. In case you still need to run Elixir software on R15, we have also released Elixir v0.8.3, which contains many of the enhancements in v0.9.0. Check the [CHANGELOG for more details for both releases](https://github.com/elixir-lang/elixir/blob/v0.9.0/CHANGELOG.md).
 
@@ -36,7 +36,9 @@ As a project grows, it is recommended to break it apart into smaller, isolated a
 
 Elixir v0.9.0 now supports umbrella projects which can work with many applications at the same time. You can create a new umbrella project with:
 
-    $ mix new my_project --umbrella
+```bash
+$ mix new my_project --umbrella
+```
 
 The generated project will have the following structure:
 
@@ -53,11 +55,11 @@ A special thanks to [Eric Meadows-Jonsson](https://github.com/ericmj) for implem
 Elixir v0.9.0 changes its main abstraction for enumeration from iterators to reducers. Before Elixir v0.9.0, when you invoked:
 
 ```elixir
-Enum.map([1,2,3], fn(x) -> x * x end)
+Enum.map([1, 2, 3], fn(x) -> x * x end)
 #=> [1, 4, 9]
 ```
 
-It asked the `Enum.Iterator` protocol for instructions on how to iterate the list `[1,2,3]`. This iteration happened by retrieving each item in the list, one by one, until there were no items left.
+It asked the `Enum.Iterator` protocol for instructions on how to iterate the list `[1, 2, 3]`. This iteration happened by retrieving each item in the list, one by one, until there were no items left.
 
 This approach posed many problems:
 
@@ -75,7 +77,7 @@ defimpl Enumerable, for: List do
     do_reduce(list, acc, fun)
   end
 
-  defp do_reduce([h|t], acc, fun) do
+  defp do_reduce([h | t], acc, fun) do
     do_reduce(t, fun.(h, acc), fun)
   end
 
@@ -89,7 +91,7 @@ The implementation above works as a simple `reduce` function (also called `fold`
 
 ```elixir
 # Sum all elements in a list
-Enumerable.reduce([1,2,3], 0, fn(x, acc) -> x + acc end)
+Enumerable.reduce([1, 2, 3], 0, fn(x, acc) -> x + acc end)
 #=> 6
 ```
 
@@ -99,7 +101,7 @@ The `Enum.map/2` we have used above is now implemented in terms of this reducing
 defmodule Enum do
   def map(collection, fun) do
     Enumerable.reduce(collection, [], fn(x, acc) ->
-      [fun.(x, acc)|acc]
+      [fun.(x, acc) | acc]
     end) |> reverse
   end
 end
@@ -121,11 +123,11 @@ A special thanks to [Eric Meadows-Jonsson](https://github.com/ericmj) for implem
 We have also many other smaller improvements:
 
 * Our CLI now supports `--hidden` and `--cookie` flags which are useful for distributed modes;
-* Our test framework, ExUnit, is now able to capture all the communication that happens with a registed IO device, like `:stdio` and `:stderr`, via [`ExUnit.CaptureIO`](http://elixir-lang.org/docs/master/ExUnit.CaptureIO.html). This is very useful for testing how your software reacts to some inputs and what it prints to the terminal;
+* Our test framework, ExUnit, is now able to capture all the communication that happens with a registed IO device, like `:stdio` and `:stderr`, via [`ExUnit.CaptureIO`](https://hexdocs.pm/ex_unit/ExUnit.CaptureIO.html). This is very useful for testing how your software reacts to some inputs and what it prints to the terminal;
 * `IEx` now allows files to be imported into the shell with `import_file` and also loads `~/.iex` on startup for custom configuration;
 * The `String`, `Enum` and `Dict` modules got more convenience functions that goes from checking unicode character validity to taking values out of a dictionary;
 * And many, many more!
 
 A huge thank you to our community for sending bug reports, providing bug fixes and contributing all those amazing features. And when are **you** joining us? :)
 
-Give Elixir a try! You can start with our [getting started guide](http://elixir-lang.org/getting_started/1.html), or [check this 30 minute video from PragProg](http://www.youtube.com/watch?v=a-off4Vznjs&feature=youtu.be) or buy the beta version of [Programming Elixir](http://pragprog.com/book/elixir/programming-elixir).
+Give Elixir a try! You can start with our [getting started guide](/getting-started/introduction.html), or [check this 30 minute video from PragProg](https://www.youtube.com/watch?v=a-off4Vznjs&feature=youtu.be) or buy the beta version of [Programming Elixir](https://pragprog.com/book/elixir/programming-elixir).

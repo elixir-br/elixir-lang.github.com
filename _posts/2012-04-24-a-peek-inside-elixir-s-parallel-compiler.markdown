@@ -14,11 +14,11 @@ The idea of the parallel compiler is very simple: for each file we want to compi
 
 In Elixir, we could write this code as follows:
 
-    def spawn_compilers([current|files], output) do
+    def spawn_compilers([current | files], output) do
       parent = Process.self()
       child  = spawn_link(fn ->
         :elixir_compiler.file_to_path(current, output)
-        parent <- { :compiled, Process.self() }
+        send parent, { :compiled, Process.self() }
       end)
       receive do
         { :compiled, ^child } ->
@@ -27,12 +27,12 @@ In Elixir, we could write this code as follows:
           :erlang.raise(:error, reason, where)
       end
     end
-    
+
     def spawn_compilers([], _output) do
       :done
     end
 
-In the first line, we define a function named `spawn_compilers` that receives two arguments, the first is a list of files to compile and the second is a string telling us where to write the compiled file. The first argument is represented as a list with head and tail (`[current|files]`) where the top of the list is assigned to `current` and the remaining items to `files`. If the list is empty, the first clause of `spawn_compilers` is not going to match, the clause `spawn_compilers([], _output)` defined at the end will instead.
+In the first line, we define a function named `spawn_compilers` that receives two arguments, the first is a list of files to compile and the second is a string telling us where to write the compiled file. The first argument is represented as a list with head and tail (`[current | files]`) where the top of the list is assigned to `current` and the remaining items to `files`. If the list is empty, the first clause of `spawn_compilers` is not going to match, the clause `spawn_compilers([], _output)` defined at the end will instead.
 
 Inside `spawn_compilers`, we first retrieve the PID of the current process with `Process.self` (remember we are talking about Erlang processes/actors and not OS processes) and then proceed to spawn a new process to execute the given function in parallel. Spawning a new process is done with the `spawn_link` function.
 
@@ -74,7 +74,7 @@ In order to customize this process, we are going to take a look at Erlang's erro
 
 ## Custom error handler
 
-By default, Elixir (and Erlang) code is autoloaded. This means that, if we invoke `List.delete` and the module `List` was not loaded yet, the Erlang VM is going to look into the `ebin` directory (the directory where we put compiled files) and try to load it. This process is controlled by the [`error_handler` module in Erlang](http://erlang.org/doc/man/error_handler.html) via two callback functions: `undefined_function` and `undefined_lambda`.
+By default, Elixir (and Erlang) code is autoloaded. This means that, if we invoke `List.delete` and the module `List` was not loaded yet, the Erlang VM is going to look into the `ebin` directory (the directory where we put compiled files) and try to load it. This process is controlled by the [`error_handler` module in Erlang](http://www.erlang.org/doc/man/error_handler.html) via two callback functions: `undefined_function` and `undefined_lambda`.
 
 As discussed in the previous section, we want to extend the error handler to actually stop the currently running process whenever a module is not found and resume the process only after we ensure the module is compiled. To do that, we can simply define our own error handler and ask Erlang to use it. Our custom error handler is defined as follows:
 
@@ -95,7 +95,7 @@ As discussed in the previous section, we want to extend the error handler to act
             []
           { :error, _ } ->
             parent = Process.get(:elixir_parent_compiler)
-            parent <- { :waiting, Process.self, module }
+            send parent, { :waiting, Process.self, module }
             receive do
               { :release, ^parent } -> ensure_loaded(module)
             end
@@ -114,20 +114,20 @@ With our error handler code in place, the first thing we need to do is to change
       Process.flag(:error_handler, Elixir.ErrorHandler)
 
       :elixir_compiler.file_to_path(current, output)
-      parent <- { :compiled, Process.self() }
+      send parent, { :compiled, Process.self() }
     end)
 
 Notice that we have two small additions. First we store the `:elixir_parent_compiler` PID in the process dictionary so we are able to read it from the error handler and then we proceed to configure a flag in our process so our new error handler is invoked whenever a module or function cannot be found.
 
 Second, our main process can now receive a new `{ :waiting, child, module }` message, so we need to extend it to account for those messages. Not only that, we need to control which PIDs we have spawned so we can notify them whenever a new module is compiled, forcing us to add a new argument to the `spawn_compilers` function. `spawn_compilers` would then be rewritten as follows:
 
-    def spawn_compilers([current|files], output, stack) do
+    def spawn_compilers([current | files], output, stack) do
       parent = Process.self()
       child  = spawn_link(fn ->
         :elixir_compiler.file_to_path(current, output)
-        parent <- { :compiled, Process.self() }
+        send parent, { :compiled, Process.self() }
       end)
-      wait_for_messages(files, output, [child|stack])
+      wait_for_messages(files, output, [child | stack])
     end
 
     # No more files and stack is empty, we are done
@@ -147,7 +147,7 @@ Notice we added an extra clause to `spawn_compilers` so we can properly handle t
         { :compiled, child } ->
           new_stack = List.delete(stack, child)
           Enum.each new_stack, fn(pid) ->
-            pid <- { :release, Process.self }
+            send pid, { :release, Process.self }
           end
           spawn_compilers(files, output, new_stack)
         { :waiting, _child, _module } ->
@@ -166,7 +166,7 @@ The implementation for `wait_for_messages` is now broken into 4 clauses:
 
 * `{ :waiting, _child, _module }` - A message received every time a child process is waiting on a module to be compiled. In this scenario, all we do is spawn a new process to compile another file, ensuring compilation is never blocked;
 
-* `{ :EXIT, _child, { reason, where } }` - The same behavior as before, it simply raises an error if any of the child processes fail;
+* `{ :EXIT, _child, { reason, where } }` - The same behaviour as before, it simply raises an error if any of the child processes fail;
 
 * `after: 10_000` - This clause is going to be invoked whenever the main process does not receive a message for 10 seconds. This means a file depends on a module that does not exist (and therefore waits forever) or there is a cyclic dependency;
 

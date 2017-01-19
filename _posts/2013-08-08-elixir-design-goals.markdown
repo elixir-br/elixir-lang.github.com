@@ -6,7 +6,7 @@ category: Internals
 excerpt: Highlight of Elixir design goals.
 ---
 
-During the last year, we have spoken at many conferences spreading the word about Elixir. We [usually started with introducing the Erlang VM](http://vimeo.com/53221562), then went on to talk about Elixir goals, saving some time at the end to do a live demo, showing some goodies like exchanging information between remote nodes and even hot code swapping.
+During the last year, we have spoken at many conferences spreading the word about Elixir. We [usually started with introducing the Erlang VM](https://vimeo.com/53221562), then went on to talk about Elixir goals, saving some time at the end to do a live demo, showing some goodies like exchanging information between remote nodes and even hot code swapping.
 
 This post is a summary of those talks, focusing on the language goals: compatibility, productivity and extensibility.
 
@@ -63,7 +63,7 @@ ExUnit.start
 
 defmodule MathTest do
   use ExUnit.Case, async: true
-  
+
   test "adding two numbers" do
     assert 1 + 2 == 4
   end
@@ -136,7 +136,7 @@ defmodule Hello do
 end
 ```
 
-Given my previous background in Ruby, it is natural that some of the constructs added were borrowed from Ruby. However, those additions were a by-product, never a language goal.
+Given my previous background in Ruby, it is natural that some of the constructs added were borrowed from Ruby. However, those additions were a by-product, and not a language goal.
 
 Many language constructs are also inspired by their Erlang counter-parts, like some of the control-flow macros, operators and containers. Notice how some Elixir code:
 
@@ -145,7 +145,7 @@ Many language constructs are also inspired by their Erlang counter-parts, like s
 tuple = { 1, 2, 3 }
 
 # Adding two lists
-[1,2,3] ++ [4,5,6]
+[1, 2, 3] ++ [4, 5, 6]
 
 # Case
 case expr do
@@ -161,7 +161,7 @@ maps to Erlang:
 Tuple = { 1, 2, 3 }.
 
 % Adding two lists
-[1,2,3] ++ [4,5,6].
+[1, 2, 3] ++ [4, 5, 6].
 
 % Case
 case Expr of
@@ -189,22 +189,22 @@ And much more.
 Most of the features above provide their own extensibility mechanisms, too. For example, take the `Enum` module. The `Enum` module allow us to enumerate the built-in ranges, lists, sets, etc:
 
 ```elixir
-list = [1,2,3]
+list = [1, 2, 3]
 Enum.map list, fn(x) -> x * 2 end
-#=> [2,4,6]
+#=> [2, 4, 6]
 
 range = 1..3
 Enum.map range, fn(x) -> x * 2 end
-#=> [2,4,6]
+#=> [2, 4, 6]
 
-set = HashSet.new [1,2,3]
+set = HashSet.new [1, 2, 3]
 Enum.map set, fn(x) -> x * 2 end
-#=> [2,4,6]
+#=> [2, 4, 6]
 ```
 
-Not only that, any developer can **extend** the `Enum` module to work with any data type as long as the data type implements [the `Enumerable` protocol](http://elixir-lang.org/docs/stable/Enumerable.html) (protocols in Elixir are based on Clojure's protocol). This is extremely convenient because the developer needs to know only the `Enum` API for enumeration, instead of memorizing specific APIs for sets, lists, dicts, etc.
+Not only that, any developer can **extend** the `Enum` module to work with any data type as long as the data type implements [the `Enumerable` protocol](https://hexdocs.pm/elixir/Enumerable.html) (protocols in Elixir are based on Clojure's protocol). This is extremely convenient because the developer needs to know only the `Enum` API for enumeration, instead of memorizing specific APIs for sets, lists, dicts, etc.
 
-There are many other protocols exposed by the language, like [the `Inspect` protocol](http://elixir-lang.org/docs/stable/Inspect.html) for pretty printing data structures and [the `Access` protocol](http://elixir-lang.org/docs/stable/Access.html) for accessing key-value data by key. By being extensible, Elixir ensures developers can work **with** the language, instead of **against** the language.
+There are many other protocols exposed by the language, like [the `Inspect` protocol](https://hexdocs.pm/elixir/Inspect.html) for pretty printing data structures and [the `Access` protocol](https://hexdocs.pm/elixir/Access.html) for accessing key-value data by key. By being extensible, Elixir ensures developers can work **with** the language, instead of **against** the language.
 
 ## Summing up
 
@@ -212,4 +212,4 @@ The goal of this post was to sumarize the language goals: compatibility, product
 
 We also hope to have clarified what Elixir brings to the Erlang VM, in particular, meta-programming through macros, polymorphic constructs for extensibility and a data-focused standard library with extensible and consistent APIs for diverse types, including strict and lazy enumeration, unicode handling, a test framework and more.
 
-Give Elixir a try! You can start with our [getting started guide](http://elixir-lang.org/getting_started/1.html), or check out our sidebar for other learning resources.
+Give Elixir a try! You can start with our [getting started guide](/getting-started/introduction.html), or check out our sidebar for other learning resources.

@@ -2,7 +2,7 @@
 layout: post
 title: Elixir's new continuable enumerators
 author: Peter Minten
-category: "What's New in Elixir"
+category: Internals
 excerpt: In 0.12.0 Elixir's enumerators have gained the ability to suspend value
          production and to terminate early.
 ---
@@ -89,7 +89,7 @@ the basis of a zip function. Without interleaving you cannot implement
 
 The underlying problem, in both cases, is that the producer is fully in control.
 The producer simply pushes out as many elements to the consumer as it wants and
-then says "I'm done". There's no way aside from `throw`/`raise` for a consumer
+then says "I'm done". There's no way aside from `throw/raise` for a consumer
 to tell a producer "stop producing". There is definitely no way to tell a
 producer "stop for now but be prepared to continue where you left off later".
 
@@ -112,7 +112,7 @@ same as in the old system. A consumer may return `:halt` to have the producer
 terminate earlier than it normally would.
 
 The real magic is in `:suspend` though. It tells a producer to return the
-accumulator and a continuation function. 
+accumulator and a continuation function.
 
 ```elixir
 { :suspended, n_, cont } = Enumerable.reduce(1..5, { :cont, 0 }, fn x, n ->
@@ -152,7 +152,7 @@ function.
 ```elixir
 defmodule Interleave do
   def interleave(a, b) do
-    step = fn x, acc -> { :suspend, [x|acc] } end
+    step = fn x, acc -> { :suspend, [x | acc] } end
     af = &Enumerable.reduce(a, &1, step)
     bf = &Enumerable.reduce(b, &1, step)
     do_interleave(af, bf, []) |> :lists.reverse()
@@ -186,7 +186,7 @@ defmodule Interleave do
   end
 end
 
-Interleave.interleave([1,2], [:a, :b, :c, :d])
+Interleave.interleave([1, 2], [:a, :b, :c, :d])
 #=> [1, :a, 2, :b, :c, :d]
 ```
 
