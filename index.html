@@ -8,23 +8,23 @@ layout: default
     <img src="/images/contents/home-code.png" alt="Elixir Sample" class="archive-thumbnail" />
 
     <div class="entry-summary">
-      <p>Elixir is a dynamic, functional language designed for building scalable and maintainable applications.</p>
+      <p>Elixir é uma dinâmica, functional linguagem contruida para contruir aplicações escaláveis e manuteníveis.</p>
 
-      <p>Elixir leverages the Erlang VM, known for running low-latency, distributed and fault-tolerant systems, while also being successfully used in web development and the embedded software domain.</p>
+      <p>Elixir aproveita a VM do Erlang, conhecida por executar sistemas de baixa lantência, distribuídos e tolerante a falhas, enquanto também sendo sendo utilizado com sucesso no desenvolvimento web e incorporado no software domain.</p>
 
-      <p>To learn more about Elixir, check our <a href="/getting-started/introduction.html">getting started guide</a>. Or keep reading to get an overview of the platform, language and tools.</p>
+      <p>Para aprender mais sobre Elixir, verifique o <a href="/getting-started/introduction.html">guia de início rápido</a>. ou continue vendo a visão geral da plataforma, linguagem e suas ferramentas.</p>
     </div>
   </div>
 
   <div class="hentry post">
-    <h3>Platform features</h3>
+    <h3>Destaques da plataforma</h3>
   </div>
 
   <div class="hentry post">
-    <h4>Scalability</h4>
+    <h4>Escalabilidade</h4>
     <div class="entry-summary">
 
-      <p>All Elixir code runs inside lightweight threads of execution (called processes) that are isolated and exchange information via messages:</p>
+      <p>Todo código Elixir roda dentro de pequenas threads (chamadas processos) que são isolados e trocam informações entre si.</p>
 
 {% highlight elixir %}
 current_process = self()
@@ -40,14 +40,14 @@ receive do
 end
 {% endhighlight %}
 
-      <p>Due to their lightweight nature, it is not uncommon to have hundreds of thousands of processes running <i>concurrently</i> in the same machine. Isolation allows processes to be garbage collected independently, reducing system-wide pauses, and using all machine resources as efficiently as possible (vertical scaling).</p>
+      <p>Devido a sua natureza pequena, não é incomum ter centenas de milhares de processos executando <i>simultaneamente</i> na mesma maquina. O isolamento permite que os processos sejam coletados de forma independente, reduzindo as pausas do sistema e usando todos os recursos da máquina da maneira mais eficiente possível (escalonamento vertical).</p>
 
-      <p>Processes are also able to communicate with other processes running on different machines in the same network. This provides the foundation for distribution, allowing developers to coordinate work across multiple nodes (horizontal scaling).</p>
+      <p>Processos são também capazes de se comunicar com outros processos rodando em maquinas diferentes na mesma rede. Isto provê a base para a distribuição, permitindo os desenvolvedores trabalhar entre diferentes nôs (escalonamento horizontal).</p>
     </div>
   </div>
 
   <div class="hentry post">
-    <h4>Fault-tolerance</h4>
+    <h4>Tolerante a falhas</h4>
 
     <div class="entry-summary">
       <p>The unavoidable truth about software running in production is that <i>things will go wrong</i>. Even more when we take network, file systems, and other third-party resources into account.</p>
