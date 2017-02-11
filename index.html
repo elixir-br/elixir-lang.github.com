@@ -103,7 +103,7 @@ serve_drinks User.get("John Doe")
     <div class="entry-summary">
       <p>Elixir has been designed to be extensible, letting developers naturally extend the language to particular domains, in order to increase their productivity.</p>
 
-      <p>As an example, let&rsquo;s write a simple test case using <a href="https://hexdocs.pm/ex_unit/">Elixir&rsquo;s test framework called ExUnit</a>:</p>
+      <p>Como por exemplo, vamos escrever um simples caso usando <a href="https://hexdocs.pm/ex_unit/">um framework de teste para Elixir chamado ExUnit</a>:</p>
 
 {% highlight elixir %}
 defmodule MathTest do
@@ -115,19 +115,19 @@ defmodule MathTest do
 end
 {% endhighlight %}
 
-      <p>The <code>async: true</code> option allows <code>test</code>s to run in parallel, using as many CPU cores as possible, while the <code>assert</code> functionality can introspect your code, providing great reports in case of failures. Those features are built using Elixir macros, making it possible to add new constructs as if they were part of the language itself.</p>
+      <p>A opção <code>async: true</code> permite <code>test</code>s rodar em pararelo, usando tantos núcleos de CPU quanto possível, enquanto o <code>assert</code> funcionadade pode introspeccionar seu código, provendo ótimos reportes em caso de falhas. Essas falhas são construidas usando Elixir macros, fazendo isso possível para adicionar novas construções como se elas fossem parte da própria linguagem.</p>
     </div>
   </div>
 
   <div class="hentry post">
-    <h3>Tooling features</h3>
+    <h3>Features das ferramentas</h3>
   </div>
 
   <div class="hentry post">
-    <h4>A growing ecosystem</h4>
+    <h4>Um ecossistema crescente</h4>
 
     <div class="entry-summary">
-      <p>Elixir ships with a great set of tools to ease development. <a href="https://hexdocs.pm/mix/">Mix is a build tool</a> that allows you to easily create projects, manage tasks, run tests and more:</p>
+      <p>Elixir vem com um grande conjunto de ferramentas para facilitar o desenvolvimento. <a href="https://hexdocs.pm/mix/">Mix é uma ferramenta de build</a> que permite você criar facilmente projetos, manusear tarefas, rodar testes e mais:</p>
 
 {% highlight text %}
 $ mix new my_app
@@ -139,15 +139,15 @@ Finished in 0.04 seconds (0.04s on load, 0.00s on tests)
 1 tests, 0 failures
 {% endhighlight %}
 
-      <p>Mix is also able to manage dependencies and integrates nicely with the <a href="https://hex.pm/">Hex package manager</a>, which provides dependency resolution and the ability to remotely fetch packages.</p>
+      <p>Mix é também capaz de manusear dependências e integra-las muito bem com o <a href="https://hex.pm/">Hex package manager</a>, o qual prove uma resolução de dependências e a habilidade de fazer fetch nos pacotes remotamente.</p>
     </div>
   </div>
 
   <div class="hentry post">
-    <h4>Interactive development</h4>
+    <h4>Desenvolvimento interativo</h4>
 
     <div class="entry-summary">
-      <p>Tools like <a href="https://hexdocs.pm/iex/">IEx (Elixir&rsquo;s interactive shell)</a> are able to leverage many aspects of the language and platform to provide auto-complete, debugging tools, code reloading, as well as nicely formatted documentation:</p>
+      <p>Ferramentas como <a href="https://hexdocs.pm/iex/">IEx (Shell iterativo do Elixir)</a> são capazes de alavancar muitos aspectos da linguagem e da plataforma e proveem auto-complete. ferramentas para debug, recarremento de códgio, bem como documentação bem formatada:</p>
 
 {% highlight text %}
 $ iex
@@ -161,17 +161,17 @@ iex> i "Hello, World"      # Prints information about the given data type
   </div>
 
   <div class="hentry post">
-    <h4>Erlang compatible</h4>
+    <h4>Compatibilidade com Erlang</h4>
 
     <div class="entry-summary">
-      <p>Elixir runs on the Erlang VM giving developers complete access to Erlang&rsquo;s ecosystem, used by companies like <a href="https://www.heroku.com">Heroku</a>, <a href="https://www.whatsapp.com">WhatsApp</a>, <a href="https://klarna.com">Klarna</a>, <a href="http://basho.com">Basho</a> and many more to build distributed, fault-tolerant applications. An Elixir programmer can invoke any Erlang function with no runtime cost:</p>
+      <p>Elixir roda na VM do Erlang dando aos desenvolvedores um acesso completo ao ecossistema Erlang, usado por empresas como <a href="https://www.heroku.com">Heroku</a>, <a href="https://www.whatsapp.com">WhatsApp</a>, <a href="https://klarna.com">Klarna</a>, <a href="http://basho.com">Basho</a> e muitas mais para construir aplicações tolerante a falhas e distribuidas. Um programador elixir pode invocar qualquer função sem custo de tempo de execução:</p>
 
 {% highlight iex %}
 iex> :crypto.hash(:md5, "Using crypto from Erlang OTP")
 <<192, 223, 75, 115, ...>>
 {% endhighlight %}
 
-      <p>To learn more about Elixir, check our <a href="/getting-started/introduction.html">getting started guide</a>. We also have <a href="/docs.html">online documentation available</a> and a <a href="/crash-course.html">Crash Course for Erlang developers</a>.</p>
+      <p>Para aprender mais sobre Elixir, verifique nosso <a href="/getting-started/introduction.html">guia de início rápido</a>. Nós também temos uma<a href="/docs.html">documentação online disponível</a> e um <a href="/crash-course.html">Crash Course para desenvolvedores Erlang</a>.</p>
     </div>
   </div>
 </div>
