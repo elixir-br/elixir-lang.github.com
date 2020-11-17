@@ -49,11 +49,15 @@ end
 
 This dependency refers to the latest version of Plug in the 1.x.x version series that has been pushed to Hex. This is indicated by the `~>` preceding the version number. For more information on specifying version requirements, see the [documentation for the Version module](https://hexdocs.pm/elixir/Version.html).
 
-Typically, stable releases are pushed to Hex. If you want to depend on an external dependency still in development, Mix is able to manage git dependencies too:
+Typically, stable releases are pushed to Hex. If you want to depend on an external dependency still in development, Mix is able to manage git dependencies too, including specific tags or branches (see the `:git` options in [`Mix.Tasks.Deps`](https://hexdocs.pm/mix/Mix.Tasks.Deps.html)):
 
 ```elixir
 def deps do
-  [{:plug, git: "git://github.com/elixir-lang/plug.git"}]
+  [
+    {:plug, git: "git://github.com/elixir-lang/plug.git"},
+    {:pkg_a, git: "git://github.com/example/pkg_a.git", tag: "1.1.3"},
+    {:pkg_b, git: "git://github.com/example/pkg_b.git", branch: "develop"}
+  ]
 end
 ```
 
@@ -78,9 +82,9 @@ The most common tasks are `mix deps.get` and `mix deps.update`. Once fetched, de
 
 Internal dependencies are the ones that are specific to your project. They usually don't make sense outside the scope of your project/company/organization. Most of the time, you want to keep them private, whether due to technical, economic or business reasons.
 
-If you have an internal dependency, Mix supports two methods to work with them: git repositories or umbrella projects.
+If you have an internal dependency, Mix supports three methods to work with them: local applications, git repositories, and umbrella projects.
 
-For example, if you push the `kv` project to a git repository, you'll need to list it in your deps code in order to use it:
+For example, if you push the `kv` project to a git repository, you'll need to list its repository URL in your deps just as you would for an external dependency:
 
 ```elixir
 def deps do
@@ -94,16 +98,26 @@ Using git dependencies for internal dependencies is somewhat discouraged in Elix
 
 However, if you push every application as a separate project to a git repository, your projects may become very hard to maintain as you will spend a lot of time managing those git repositories rather than writing your code.
 
+Rather than juggling multiple git repositories, you can reference local applications as dependencies via the [`:path` keyword](https://hexdocs.pm/mix/Mix.Tasks.Deps.html):
+
+```elixir
+def deps do
+  [{:local_dependency, path: "path/to/local_dependency"}]
+end
+```
+
+Although this may be useful in certain situations (e.g. during development), referencing random local folders can be brittle and hard to maintain.
+
 For this reason, Mix supports "umbrella projects." Umbrella projects allow you to create one project that hosts many applications while keeping all of them in a single source code repository. That is exactly the style we are going to explore in the next sections.
 
-Let's create a new Mix project. We are going to creatively name it `kv_umbrella`, and this new project will have both the existing `kv` application and the new `kv_server` application inside. The directory structure will look like this:
+Let's create a new Mix project. We are going to name it `kv_umbrella`, and this new project will have both the existing `kv` application and the new `kv_server` application inside. The directory structure will look like this:
 
     + kv_umbrella
       + apps
         + kv
         + kv_server
 
-The interesting thing about this approach is that Mix has many conveniences for working with such projects, such as the ability to compile and test all applications inside `apps` with a single command. However, even though they are all listed together inside `apps`, they are still decoupled from each other, so you can build, test and deploy each application in isolation if you want to.
+The interesting thing about this approach is that Mix has many conveniences for working with such projects, such as the ability to compile and test all applications inside `apps` with a single command. However, even though they are all listed together inside `apps`, they are still decoupled from each other, so you can build, test and deploy each application in isolation if you want.
 
 So let's get started!
 
